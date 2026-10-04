@@ -1,11 +1,11 @@
-# 🌾 SAAN (สาน) — Woven Energy Dashboard
+#  SAAN (สาน) — Woven Energy Dashboard
 
 ระบบพยากรณ์พลังงานชีวมวลและบริหารจัดการเครือข่ายเกษตรกร  
 **ผู้จัดทำ:** 67160228 นายพิสิษฐ์สรรค์ ปรีชา
 
 ---
 
-## 📌 ภาพรวมโครงการ (Project Overview)
+##  ภาพรวมโครงการ (Project Overview)
 
 Dashboard นี้ถูกออกแบบเชิงเล่าเรื่อง (Data Storytelling Dashboard) ตาม Brand Identity ของแบรนด์ **SAAN (สาน)** เพื่อสื่อสารข้อมูลและคุณค่าทางธุรกิจ (Business Value Proposition) ให้กับผู้มีส่วนได้ส่วนเสียใน 4 มิติหลัก:
 
@@ -16,7 +16,7 @@ Dashboard นี้ถูกออกแบบเชิงเล่าเรื�
 
 ---
 
-## 🎨 Brand Identity & Design System
+##  Brand Identity & Design System
 
 Dashboard นี้ออกแบบโดยใช้องค์ประกอบ Design System ของแบรนด์ SAAN อย่างเคร่งครัด:
 
@@ -32,7 +32,7 @@ Dashboard นี้ออกแบบโดยใช้องค์ประก�
 
 ---
 
-## 📁 โครงสร้าง Repository (Repository Structure)
+##  โครงสร้าง Repository (Repository Structure)
 
 ```text
 .
