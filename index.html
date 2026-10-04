@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAAN (สาน) - Woven Energy Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --field-green: #0B3B2E;
+            --straw-gold: #E3A93C;
+            --signal-teal: #2FB3A3;
+            --rice-paper: #F6F3EC;
+            --ash-charcoal: #1C1C1A;
+            --alert-clay: #C75C4A;
+        }
+        body {
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            background-color: var(--rice-paper);
+            color: var(--ash-charcoal);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: var(--field-green);
+            color: var(--rice-paper);
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 { margin: 0; font-size: 22px; font-weight: 700; }
+        p.subtitle { margin: 4px 0 0 0; font-size: 13px; opacity: 0.8; }
+        .mono-num { font-family: 'IBM Plex Mono', monospace; }
+        .grid-kpi {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: #FFFFFF;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #E0DDD5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .kpi-title { font-size: 12px; color: #666; margin-bottom: 6px; }
+        .kpi-value { font-size: 24px; font-weight: 700; color: var(--field-green); }
+        .kpi-sub { font-size: 11px; color: var(--signal-teal); margin-top: 4px; }
+        .grid-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+        }
+        .chart-card {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #E0DDD5;
+        }
+        .chart-card h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: var(--field-green);
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>🌾 SAAN (สาน) — Woven Energy Dashboard</h1>
+            <p class="subtitle">ระบบพยากรณ์พลังงานชีวมวลและบริหารจัดการเครือข่ายเกษตรกร | 67160228 นายพิสิษฐ์สรรค์ ปรีชา</p>
+        </div>
+        <div>
+            <span style="background: var(--signal-teal); padding: 6px 12px; border-radius: 20px; font-size: 12px; color: white;">AI Status: Online</span>
+        </div>
+    </header>
+
+    <div class="grid-kpi">
+        <div class="card">
+            <div class="kpi-title">กำลังการผลิตไฟฟ้าปัจจุบัน (MW)</div>
+            <div class="kpi-value mono-num">9.90 MW</div>
+            <div class="kpi-sub">Target: 9.90 MW (100%)</div>
+        </div>
+        <div class="card">
+            <div class="kpi-title">Availability Factor (%AF)</div>
+            <div class="kpi-value mono-num">87.4%</div>
+            <div class="kpi-sub">+2.1% จากสัปดาห์ก่อน</div>
+        </div>
+        <div class="card">
+            <div class="kpi-title">การลดคาร์บอนสะสม</div>
+            <div class="kpi-value mono-num">12,480 <span style="font-size: 13px;">tCO₂e</span></div>
+            <div class="kpi-sub">คำนวณอัตโนมัติผ่าน AI</div>
+        </div>
+        <div class="card">
+            <div class="kpi-title">วัตถุดิบรับซื้อวันนี้</div>
+            <div class="kpi-value mono-num">148.5 <span style="font-size: 13px;">Tons</span></div>
+            <div class="kpi-sub">จ่ายตรงสู่เกษตรกร: 222,750 บาท</div>
+        </div>
+    </div>
+
+    <div class="grid-charts">
+        <div class="chart-card">
+            <h3>⚡ กำลังการผลิตไฟฟ้า: ผลิตจริง (Actual) vs AI พยากรณ์ (Forecast)</h3>
+            <canvas id="powerChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>🚜 ปริมาณรับซื้อชีวมวลและรายได้กระจายสู่ชุมชน (Tons)</h3>
+            <canvas id="biomassChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctxPower = document.getElementById('powerChart').getContext('2d');
+        new Chart(ctxPower, {
+            type: 'line',
+            data: {
+                labels: ['01 ต.ค.', '02 ต.ค.', '03 ต.ค.', '04 ต.ค.', '05 ต.ค.', '06 ต.ค.', '07 ต.ค.'],
+                datasets: [{
+                    label: 'ผลิตจริง (Signal Teal)',
+                    data: [9.85, 9.90, 9.72, 9.91, 9.88, 9.90, 9.90],
+                    borderColor: '#2FB3A3',
+                    backgroundColor: '#2FB3A3',
+                    borderWidth: 3,
+                    tension: 0.2
+                }, {
+                    label: 'พยากรณ์ AI (Straw Gold)',
+                    data: [9.90, 9.90, 9.88, 9.90, 9.90, 9.90, 9.90],
+                    borderColor: '#E3A93C',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    pointRadius: 0
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        const ctxBio = document.getElementById('biomassChart').getContext('2d');
+        new Chart(ctxBio, {
+            type: 'bar',
+            data: {
+                labels: ['01 ต.ค.', '02 ต.ค.', '03 ต.ค.', '04 ต.ค.', '05 ต.ค.', '06 ต.ค.', '07 ต.ค.'],
+                datasets: [{
+                    label: 'ปริมาณชีวมวลรับเข้า (Tons)',
+                    data: [145, 150, 138, 152, 148, 160, 155],
+                    backgroundColor: '#0B3B2E',
+                    borderRadius: 6
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+</body>
+</html>
